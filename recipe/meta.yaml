@@ -1,0 +1,60 @@
+{% set name = "loro" %}
+{% set version = "1.8.1" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: 22cfb19625bd7245e9747ee9d43b10511c16a35775a38cf914dc74863c4dbe88
+
+build:
+  number: 0
+  skip: true  # [py<38]
+  script:
+    - cargo-bundle-licenses --format yaml --output THIRDPARTY.yml
+    - {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vv
+
+requirements:
+  build:
+    - {{ stdlib('c') }}
+    - {{ compiler('rust') }}
+    - cargo-bundle-licenses
+  host:
+    - python
+    - maturin >=1.8,<2.0
+    - pip
+  run:
+    - python
+
+test:
+  source_files:
+    - tests
+  imports:
+    - loro
+  requires:
+    - pip
+    - pytest
+  commands:
+    - pip check
+    - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
+    - pytest -ra -vv tests
+
+  
+about:
+  home: https://loro.dev
+  license: MIT
+  license_file:
+    - THIRDPARTY.yml
+    - LICENSE
+  license_family: MIT
+  summary: Python bindings for [Loro](https://loro.dev)
+  description: Python bindings for Loro CRDT
+  dev_url: https://github.com/loro-dev/loro-py
+  doc_url: https://github.com/loro-dev/loro-py
+
+extra:
+  recipe-maintainers:
+    - AH-Merii
+    - Leeeon233
