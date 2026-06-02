@@ -27,6 +27,7 @@ requirements:
     - pip
   run:
     - python
+    - libgcc  # [linux]
 
 test:
   source_files:
