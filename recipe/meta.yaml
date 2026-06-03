@@ -20,6 +20,7 @@ requirements:
   build:
     - {{ stdlib('c') }}
     - {{ compiler('rust') }}
+    - {{ compiler('c') }}  # [linux]
     - cargo-bundle-licenses
   host:
     - python
@@ -27,7 +28,6 @@ requirements:
     - pip
   run:
     - python
-    - libgcc  # [linux]
 
 test:
   source_files:
