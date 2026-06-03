@@ -1,5 +1,5 @@
 {% set name = "loro" %}
-{% set version = "1.8.1" %}
+{% set version = "1.10.3" %}
 
 package:
   name: {{ name|lower }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 22cfb19625bd7245e9747ee9d43b10511c16a35775a38cf914dc74863c4dbe88
+  sha256: 68184ab1c2ab94af6ad4aaba416d22f579cabee0b26cbb09a1f67858207bbce8
 
 build:
   number: 0
@@ -20,6 +20,7 @@ requirements:
   build:
     - {{ stdlib('c') }}
     - {{ compiler('rust') }}
+    - {{ compiler('c') }}  # [linux]
     - cargo-bundle-licenses
   host:
     - python
