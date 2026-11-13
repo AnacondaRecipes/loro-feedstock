@@ -1,18 +1,20 @@
 {% set name = "loro" %}
-{% set version = "1.10.3" %}
+{% set version = "1.17.1" %}
 
 package:
-  name: {{ name|lower }}
+  name: {{ name }}
   version: {{ version }}
 
 source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 68184ab1c2ab94af6ad4aaba416d22f579cabee0b26cbb09a1f67858207bbce8
+  sha256: 6971727a12ef2d8c232e3ad54d9d00a3fbd04774d13b0ae0e744d0a60b651843
 
 build:
   number: 0
   skip: true  # [py<38]
   script:
+    - export PYO3_USE_ABI3_FORWARD_COMPATIBILITY=1  # [unix and py>314]
+    - set PYO3_USE_ABI3_FORWARD_COMPATIBILITY=1     # [win and py>314]
     - cargo-bundle-licenses --format yaml --output THIRDPARTY.yml
     - {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vv
 
